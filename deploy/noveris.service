@@ -1,0 +1,25 @@
+[Unit]
+Description=Noveris AI control plane
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=noveris
+Group=noveris
+WorkingDirectory=/data/workspace/install-noveris/backend
+EnvironmentFile=/data/workspace/install-noveris/backend/.env
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/data/workspace/install-noveris/.venv/bin/uvicorn app.main:app --host ${BIND_HOST} --port ${BIND_PORT} --workers 1
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=30
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/data/workspace/install-noveris/data
+
+[Install]
+WantedBy=multi-user.target
